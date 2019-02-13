@@ -36,7 +36,7 @@ export default class App extends React.Component {
     return (
       <main>      
         <section className="todo-list">
-            <Header title={title}/>
+            <Header title={title} initialData={todos}/>
             {todos.map(({id, title, completed}) => 
               <Todo 
                 key={id} 
