@@ -7,6 +7,8 @@ import todos from './todos'
 
 import './index.css';
 
+console.log('hi');
+
 
 ReactDOM.render(<App todos={todos} />, document.getElementById('root'));
 
