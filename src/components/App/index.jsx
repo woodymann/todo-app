@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import Header from '../Header'
 import Todo from '../Todo'
+import Form from '../Form'
 
 import './index.css';
 
@@ -10,6 +11,11 @@ export default class App extends React.Component {
 
   state = {
     todos: this.props.todos
+  }
+
+  nextId(){
+    this._nextId = this._nextId || 5;
+    return this._nextId++;
   }
 
   handleCheckboxChange = id => {
@@ -29,6 +35,18 @@ export default class App extends React.Component {
     this.setState({ todos }) 
   }
 
+  handleAdd = (title) => {
+    let todo = {
+      id: this.nextId(),
+      title: title,
+      completed: false
+    }
+
+    let todos = [...this.state.todos, todo];
+
+    this.setState({ todos });
+  }
+
   render(){
     const {todos} = this.state;
     const {title} = this.props;
@@ -37,6 +55,7 @@ export default class App extends React.Component {
       <main>      
         <section className="todo-list">
             <Header title={title} initialData={todos}/>
+            <Form onAdd={this.handleAdd}/>
             {todos.map(({id, title, completed}) => 
               <Todo 
                 key={id} 

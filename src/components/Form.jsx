@@ -3,19 +3,33 @@ import PropTypes from 'prop-types';
 
 import Button from './Button'
 
-export default function Todo({id, title, completed, onCheckboxChange, onButtonClick}){
-  return(
-    <form>
-      <input type="text" />
-      <Button>Add</Button>
-    </form>
-  )
+export default class Form extends React.Component{
+
+  handleSubmit = (event) => {
+    event.preventDefault();
+
+    let title = this.refs.title.value;
+
+    if(title){
+      this.props.onAdd(title);
+      this.refs.title.value = '';
+    }
+    
+  }
+
+  render(){
+
+    return(
+      <form className="todo-form" onSubmit={this.handleSubmit}>
+        <input type="text" ref="title" placeholder="Enter task..."/>
+        <Button type="submit">Add</Button>
+      </form>
+    )
+  }
+  
 }
 
-Todo.propTypes = {
-  id: PropTypes.number.isRequired,
-  title: PropTypes.string.isRequired,
-  completed: PropTypes.bool.isRequired,
-  onCheckboxChange: PropTypes.func.isRequired,
-  onButtonClick: PropTypes.func.isRequired
+Form.propTypes = {
+  onAdd: PropTypes.func.isRequired
 }
+

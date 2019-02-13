@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import Stats from './Stats'
 
+
 export default function Header({title, initialData}){
   return(
     <header>
