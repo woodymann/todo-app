@@ -5,23 +5,33 @@ import Button from './Button'
 
 export default class Form extends React.Component{
 
-  handleSubmit = (event) => {
+  state = {
+    title: ''
+  }
+
+  handleSubmit = event => {
     event.preventDefault();
 
-    let title = this.refs.title.value;
+    let title = this.state.title;
 
     if(title){
       this.props.onAdd(title);
-      this.refs.title.value = '';
+      this.setState({ title: '' });
     }
     
+  }
+
+  handleChange = event => {
+    let title = event.target.value;
+
+    this.setState({ title });
   }
 
   render(){
 
     return(
       <form className="todo-form" onSubmit={this.handleSubmit}>
-        <input type="text" ref="title" placeholder="Enter task..."/>
+        <input type="text" value={this.state.title} placeholder="Enter task..." onChange={this.handleChange}/>
         <Button type="submit">Add</Button>
       </form>
     )
