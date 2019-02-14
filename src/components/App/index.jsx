@@ -11,28 +11,26 @@ export default class App extends React.Component {
 
   state = {
     todos: this.props.todos
-  }
+  };
 
   nextId(){
     this._nextId = this._nextId || 5;
     return this._nextId++;
-  }
+  };
 
   handleCheckboxChange = id => {
-    const { todos } = this.state;
-
-    todos.map(todo => {
+    const todos = this.state.todos.map(todo => {
       if(todo.id === id) todo.completed = !todo.completed;
       return todo;
-    })
+    });
 
-    this.setState({ todos })
+    this.setState({ todos });
   };
 
   handleDeleteButtonClick = id =>  {
     const todos = this.state.todos.filter(todo => todo.id !== id);
 
-    this.setState({ todos }) 
+    this.setState({ todos }) ;
   }
 
   handleAdd = (title) => {
@@ -40,9 +38,18 @@ export default class App extends React.Component {
       id: this.nextId(),
       title: title,
       completed: false
-    }
+    };
 
     let todos = [...this.state.todos, todo];
+
+    this.setState({ todos });
+  }
+
+  handleEdit = (id, title) => {
+    const todos = this.state.todos.map(todo => {
+      if(todo.id === id) todo.title = title;
+      return todo;
+    });
 
     this.setState({ todos });
   }
@@ -64,6 +71,7 @@ export default class App extends React.Component {
                 completed={completed} 
                 onCheckboxChange={this.handleCheckboxChange}
                 onButtonClick={this.handleDeleteButtonClick}
+                onEdit={this.handleEdit}
               />
             )}
         </section>
