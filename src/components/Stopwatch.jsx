@@ -10,7 +10,7 @@ export default class Stopwatch extends React.Component{
   }
 
   componentDidMount(){
-    this._interval = setInterval(this.tick, 1000);
+    //this._interval = setInterval(this.tick, 1000);
   }
 
   tick(){

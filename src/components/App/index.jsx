@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types';
+import axios from 'axios';
 
 import Header from '../Header'
 import Todo from '../Todo'
@@ -13,45 +14,65 @@ export default class App extends React.Component {
     todos: this.props.todos
   };
 
-  nextId(){
-    this._nextId = this._nextId || 5;
-    return this._nextId++;
-  };
+  componentDidMount(){
+    axios.get('http://localhost:3000/api/todos')
+      .then(response => response.data)
+      .then(todos => {this.setState({ todos })})
+      .catch(this.handleError);
+  }
 
   handleCheckboxChange = id => {
-    const todos = this.state.todos.map(todo => {
-      if(todo.id === id) todo.completed = !todo.completed;
-      return todo;
-    });
+    axios.patch(`/api/todos/${id}`)
+      .then(response => {
+        const todos = this.state.todos.map(todo => {
+          if(todo.id === id) todo = response.data;
+          return todo;
+        });
+        this.setState({ todos });
+      })
+      .catch(this.handleError);
 
-    this.setState({ todos });
+    
   };
 
   handleDeleteButtonClick = id =>  {
-    const todos = this.state.todos.filter(todo => todo.id !== id);
+    axios.delete(`/api/todos/${id}`)
+      .then(() => {
+        const todos = this.state.todos.filter(todo => todo.id !== id);
 
-    this.setState({ todos }) ;
+        this.setState({ todos });
+      })
+      .catch(this.handleError);
+    
   }
 
   handleAdd = (title) => {
-    let todo = {
-      id: this.nextId(),
-      title: title,
-      completed: false
-    };
+    axios.post('/api/todos', { title })
+      .then(response => response.data)
+      .then(todo => {
+        let todos = [...this.state.todos, todo];
 
-    let todos = [...this.state.todos, todo];
-
-    this.setState({ todos });
+        this.setState({ todos }); 
+      })
+      .catch(this.handleError);    
   }
 
   handleEdit = (id, title) => {
-    const todos = this.state.todos.map(todo => {
-      if(todo.id === id) todo.title = title;
-      return todo;
-    });
+    axios.put(`/api/todos/${id}`, {title})
+      .then(response => {
+        const todos = this.state.todos.map(todo => {
+          if(todo.id === id) todo = response.data;
+          return todo;
+        });
+        
+        this.setState({ todos });
+      })
+      .catch(this.handleError); 
+    
+  }
 
-    this.setState({ todos });
+  hhandleError(error){
+    console.error(error.message);
   }
 
   render(){
